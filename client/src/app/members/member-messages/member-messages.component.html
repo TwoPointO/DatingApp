@@ -6,11 +6,12 @@
         *ngIf="(messageService.messageThread$ | async)?.length > 0" class="chat">
             <li *ngFor="let message of (messageService.messageThread$ | async)">
                 <div>
-                    <span class="chat-img float-right">
+                    <span class="chat-img">
                         <img class="rounded-circle" src="{{message.senderPhotoUrl || './assets/user.png'}}" 
                             alt="{{message.senderUsername}}">
                     </span>
-                    <div class="chat-body">
+                    <div class="chat-body">                        
+                        <p [ngClass]="message.senderUsername===username ? 'message-content-sender' : 'message-content'">{{message.content}}</p>
                         <div class="header">
                             <small class="text-muted">
                                 <span class="fa fa-clock-o">{{message.messageSent | timeago}}</span>
@@ -20,7 +21,6 @@
                                     *ngIf="message.dateRead && message.senderUsername !== username">(read {{message.dateRead | timeago}})</span>
                             </small>
                         </div>
-                        <p>{{message.content}}</p>
                     </div>
                 </div>
             </li>

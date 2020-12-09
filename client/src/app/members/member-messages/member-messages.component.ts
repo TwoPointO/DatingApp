@@ -11,7 +11,6 @@ import { MessageService } from 'src/app/_services/message.service';
   styleUrls: ['./member-messages.component.css']
 })
 export class MemberMessagesComponent implements OnInit {
-  @ViewChild(NgxAutoScroll) public ngxAutoScroll: NgxAutoScroll;
   @ViewChild('messageForm') messageForm: NgForm;
   @Input() messages: Message[];
   @Input() username: string;
@@ -20,7 +19,6 @@ export class MemberMessagesComponent implements OnInit {
   constructor(public messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.forceScrollDown();
   }
 
   sendMessage() {
@@ -28,8 +26,4 @@ export class MemberMessagesComponent implements OnInit {
             this.messageForm.reset();
     })
   }
-
-  public forceScrollDown(): void {
-    this.ngxAutoScroll.forceScrollDown();
-}
 }

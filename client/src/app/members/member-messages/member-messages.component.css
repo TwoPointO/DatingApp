@@ -11,9 +11,38 @@
 .chat li {
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat-img {
+    float: left;
+    padding-right: 10px;
+    margin-right: 10px;
+}
+
+.message-content {
+    border: 1px solid orangered;
+    background-color: orangered;
+    margin-left: 75px;
+    border-radius: 5px;
+    color: black;
+    padding: 5px 15px;
+    max-width: 40%;
+}
+
+.message-content-sender {
+    border: 1px solid rgb(255, 0, 64);
+    background-color: rgb(255, 0, 64);
+    margin-left: 75px;
+    border-radius: 5px;
+    color: black;
+    padding: 5px 15px;
+    max-width: 40%;
 }
 
 .rounded-circle {
     max-height: 50px;
+}
+
+.header {
+    font-size: small;
 }
