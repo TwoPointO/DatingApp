@@ -2,6 +2,21 @@
     <h2>Your matches - {{pagination?.totalItems}} found </h2>
 </div>
 
+<div class="row">
+    <div class="col-2"  *ngFor="let member of members">
+        <app-member-card [member] = "member"></app-member-card>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center" *ngIf="pagination">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" 
+            [itemsPerPage]="pagination.itemsPerPage"
+            [(ngModel)]="pagination.currentPage"
+            (pageChanged)="pageChanged($event)"
+            previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+    </pagination>
+</div>
+
 <div class="container mt-3">
     <form #form="ngForm" class="form-inline mb-3" (ngSubmit)="loadMembers()" autocomplete="off">
         <div class="form-group">
@@ -43,19 +58,4 @@
             </div>
         </div>       
     </form>
-</div>
-
-<div class="row">
-    <div class="col-2"  *ngFor="let member of members">
-        <app-member-card [member] = "member"></app-member-card>
-    </div>
-</div>
-
-<div class="d-flex justify-content-center" *ngIf="pagination">
-    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" 
-            [itemsPerPage]="pagination.itemsPerPage"
-            [(ngModel)]="pagination.currentPage"
-            (pageChanged)="pageChanged($event)"
-            previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
-    </pagination>
 </div>

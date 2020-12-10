@@ -12,6 +12,8 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { TimeagoModule } from 'ngx-timeago';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxAutoScrollModule } from 'ngx-auto-scroll';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { MatBadgeModule } from '@angular/material/badge';
 
 
 
@@ -32,7 +34,9 @@ import { NgxAutoScrollModule } from 'ngx-auto-scroll';
     ButtonsModule.forRoot(),
     TimeagoModule.forRoot(),
     ModalModule.forRoot(),
-    NgxAutoScrollModule
+    NgxAutoScrollModule,
+    NgxSliderModule,
+    MatBadgeModule
   ],
   exports: [
     BsDropdownModule, 
@@ -46,7 +50,9 @@ import { NgxAutoScrollModule } from 'ngx-auto-scroll';
     ButtonsModule,
     TimeagoModule,
     ModalModule,
-    NgxAutoScrollModule
+    NgxAutoScrollModule,
+    NgxSliderModule,
+    MatBadgeModule  
   ]
 })
 export class SharedModule { }
