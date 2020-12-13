@@ -55,6 +55,12 @@ namespace API.Data
                 userParams.PageNumber, userParams.PageSize);
         }
 
+        public async Task<UserSettings> GetSettingsForUser(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
+            return await _context.UserSettings.FindAsync(user.Id);
+        }
+
         public async Task<AppUser> GetUserByIdAsync(int id)
         {
             return await _context.Users.FindAsync(id);
@@ -83,6 +89,11 @@ namespace API.Data
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             return await _context.Users.Include(p => p.Photos).ToListAsync();
+        }
+
+        public void Update(UserSettings settings)
+        {
+            _context.Entry(settings).State = EntityState.Modified;
         }
 
         public void Update(AppUser user)

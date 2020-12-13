@@ -30,6 +30,11 @@ namespace API.Data
 
             foreach(var user in users) {
                 user.UserName = user.UserName.ToLower();
+                user.UserSettings = new UserSettings {
+                    MinAge = RandomNumberGenerator.GetInt32(10) + 18,
+                    MaxAge = RandomNumberGenerator.GetInt32(50) + 30,
+                    Gender = user.Gender == "male" ? "female" : "male"
+                };
                 foreach(var photo in user.Photos) {
                     photo.IsApproved = true;
                 }              
@@ -39,7 +44,8 @@ namespace API.Data
             }
 
             var admin = new AppUser {
-                UserName = "admin"
+                UserName = "admin",
+                KnownAs = "Admin"
             };
 
             await userManager.CreateAsync(admin, "Pa$$w0rd");

@@ -135,5 +135,26 @@ namespace API.Controllers
 
             return BadRequest("Failed to delete the photo!");
         }
+
+        [HttpGet("settings/{username}")]
+        public async Task<ActionResult<UserSettings>> GetUserSettings(string username) {
+            return await _unitOfWork.UserRepository.GetSettingsForUser(username);
+        }
+
+        [HttpPut("settings/update")]
+        public async Task<ActionResult> UpdateSettings(UserSettings userSettings)
+        {
+            var settings = await _unitOfWork.UserRepository.GetSettingsForUser(User.GetUsername());
+
+            if(settings == null) return BadRequest("Couldn't find settings");
+
+            settings = userSettings;
+
+            _unitOfWork.UserRepository.Update(settings);
+
+            if (await _unitOfWork.Complete()) return NoContent();
+
+            return BadRequest("Failed to update settings!");
+        }
     }
 }

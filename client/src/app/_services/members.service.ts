@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
 import { User } from '../_models/user';
 import { UserParams } from '../_models/userParams';
+import { UserSettings } from '../_models/userSettings';
 import { AccountService } from './account.service';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 
@@ -18,43 +19,53 @@ export class MembersService {
   memberCache = new Map();
   user: User;
   userParams: UserParams;
+  userSettings: UserSettings = {
+    minAge: 20,
+    maxAge: 50,
+    gender: 'male',
+    id: 1
+  }
 
   constructor(private http: HttpClient, private accountService: AccountService) { 
     this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
       this.user = user;
-      this.userParams = new UserParams(user);
+      //this.userParams = new UserParams(this.userSettings);
+    })
+    this.getUserSettings(this.user.username).subscribe(settings => {
+      this.userSettings = settings;
+      this.userParams = new UserParams(this.userSettings);
     })
   }
 
   getUserParams() {
-    return this.userParams;
+    return new UserParams(this.userSettings);
   }
 
-  setUserParams(params: UserParams) {
-    this.userParams = params;
+  setUserParams(userSettings: UserSettings) {
+    this.userParams = new UserParams(this.userSettings);
   }
 
   resetUserParams() {
-    this.userParams = new UserParams(this.user);
+    this.userParams = new UserParams(this.userSettings);
     return this.userParams;
   }
 
-  getMembers(userParams: UserParams) {
-    var response = this.memberCache.get(Object.values(userParams).join('-'));
+  getMembers() {
+    var response = this.memberCache.get(Object.values(this.userParams).join('-'));
     if(response) {
       return of(response);
     }
 
-    let params = getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
+    let params = getPaginationHeaders(this.userParams.pageNumber, this.userParams.pageSize);
 
-    params = params.append('minAge', userParams.minAge.toString());
-    params = params.append('maxAge', userParams.maxAge.toString());
-    params = params.append('gender', userParams.gender);
-    params = params.append('orderBy', userParams.orderBy);
+    params = params.append('minAge', this.userParams.minAge.toString());
+    params = params.append('maxAge', this.userParams.maxAge.toString());
+    params = params.append('gender', this.userParams.gender);
+    params = params.append('orderBy', this.userParams.orderBy);
 
     return getPaginatedResult<Member[]>(this.baseUrl + 'users', params, this.http)
       .pipe(map(response => {
-        this.memberCache.set(Object.values(userParams).join('-'), response);
+        this.memberCache.set(Object.values(this.userParams).join('-'), response);
         return response;
       }))
   }
@@ -93,5 +104,13 @@ export class MembersService {
     let params = getPaginationHeaders(pageNumber, pageSize);
     params = params.append('predicate', predicate);
     return getPaginatedResult<Partial<Member[]>>(this.baseUrl + 'likes', params, this.http);
+  }
+
+  getUserSettings(username: string) {
+    return this.http.get<UserSettings>(this.baseUrl + 'users/settings/' + username);
+  }
+
+  saveSettings(userSettings: UserSettings) {
+    return this.http.put(this.baseUrl + 'settings/update', userSettings);
   }
 }

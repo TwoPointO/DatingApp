@@ -1,4 +1,5 @@
 import { User } from './user';
+import { UserSettings } from './userSettings';
 
 export class UserParams {
     gender: string;
@@ -8,7 +9,10 @@ export class UserParams {
     pageSize = 5;
     orderBy = 'lastActive';
 
-    constructor(user: User) {
-        this.gender = user.gender === 'female'? 'male' : 'female';
+    constructor(userSettings: UserSettings, pageNumber = 1) {
+        this.gender = userSettings.gender,
+        this.minAge = userSettings.minAge,
+        this.maxAge = userSettings.maxAge,
+        this.pageNumber = pageNumber
     }
 }
